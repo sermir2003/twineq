@@ -1,0 +1,5 @@
+myhistory/
+build-dir/
+cmake-build-release/
+cmake-build-debug/
+.idea/
