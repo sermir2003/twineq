@@ -3,20 +3,16 @@
 #include <vector>
 #include <memory>
 #include "input_request.h"
+#include <stdexcept>
 
 class InputSubsystem {
 public:
-    static std::unique_ptr<InputRequest> Input(size_t argc, char *argv[]);
+    static std::unique_ptr<InputRequest> Parse(size_t argc, char *argv[]);
 private:
-    static std::vector<std::string> ParseToVectorString(size_t argc, char *argv[]);
+    static std::vector<std::string> Tokenize(size_t argc, char *argv[]);
 };
 
-class ParserExceptionIncorrectParameters {
-private:
-    std::string error_message_;
+class ParseException : public std::runtime_error {
 public:
-    ParserExceptionIncorrectParameters(std::string error_message) : error_message_(error_message) {}
-    std::string GetErrorMessage() const {
-        return error_message_;
-    }
+    ParseException(const std::string& error_message) : std::runtime_error(error_message) {}
 };

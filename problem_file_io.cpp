@@ -34,13 +34,13 @@ Problem ProblemFileIO::ParseProblemFile(const std::string& path_to_file) {
     if (data_json["kernel"]["type"].get<std::string>() == "Exponential") {
         double A = std::stod(data_json["kernel"]["A"].get<std::string>());
         double B = std::stod(data_json["kernel"]["A"].get<std::string>());
-        kernels = std::unique_ptr<Kernels>(new ExpKernels(A, B));  // TODO: make without explicit new
+        kernels = std::make_unique<ExpKernels>(A, B);
         // std::cout << "Exponential A=" << A << " B=" << B << std::endl;
     }
     else if (data_json["kernel"]["type"].get<std::string>() == "Rational") {
         double A = std::stod(data_json["kernel"]["A"].get<std::string>());
         double p = std::stod(data_json["kernel"]["p"].get<std::string>());
-        kernels = std::unique_ptr<Kernels>(new RationalKernels(A, p));  // TODO: make without explicit new
+        kernels = std::make_unique<RationalKernels>(A, p);
         // std::cout << "Rational A=" << A << " p=" << p << std::endl;
     }
     double b = std::stod(data_json["b"].get<std::string>());
@@ -49,7 +49,8 @@ Problem ProblemFileIO::ParseProblemFile(const std::string& path_to_file) {
     double grid_count = std::stod(data_json["grid count"].get<std::string>());
     double iteration_count = std::stod(data_json["iteration count"].get<std::string>());
     std::string path_to_result_file = data_json["path to result file"].get<std::string>();
-    // std::cout << "b=" << b << " d'=" << s << " r=" << r << " gcount=" << grid_count << " icount=" << iteration_count << std::endl;
+    // std::cout << "b=" << b << " d'=" << s << " r=" << r << " gcount=" << grid_count
+    // << " icount=" << iteration_count << std::endl;
     // std::cout << "w(-20)=" << kernels->w(-20) << std::endl;
     return Problem(std::move(kernels), b, s, r, grid_count, iteration_count, path_to_result_file);
 }

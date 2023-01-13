@@ -14,7 +14,7 @@ private:
 //    const double d_ = 0;  /// intrinsic rates of death
     double b_;  /// intrinsic rates of birth
     double s_;  /// the same as d'
-    double r_;  /// segment size: [-r; r] TODO: find out what the hell it is
+    double r_;  /// segment size: [-r; r]
     size_t grid_count_;  /// the number of grid nodes for which calculations are performed
     double step_size_;  /// the scale of the grid of nodes for which calculations are performed
     size_t iter_count_;  /// number of iterations

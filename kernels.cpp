@@ -8,8 +8,9 @@ Kernels::~Kernels() {
 }
 RationalKernels::RationalKernels(double A, double p) : A(A), p(p) {
     double p2 = p * p;
-    double p4 = p2 * p2;
-    N = (A * M_PI * (A + 5 * p2) * (A + 8 * p2)) / (p * (A * A + 21 * A * p2 + 120 * p4));
+//    double p4 = p2 * p2;
+    N = (A * M_PI * (A + 5 * p2) * (A + 8 * p2)) /
+        (p * (A * A + 21 * A * p2 + 120 * p2));  // TODO: p^4 vs p^2
 }
 double RationalKernels::m(double x) const {
     return p / (M_PI * (x * x + p * p));
