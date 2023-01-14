@@ -3,8 +3,8 @@
 #include <iostream>
 #include <iomanip>
 
-ManualSolver::ManualSolver(Task&& problem)
-    : data_(std::move(problem)),
+ManualSolver::ManualSolver(Task&& task)
+    : data_(std::move(task)),
       f_(data_.grid_count()),
       c_(data_.grid_count()),
       c_next_(data_.grid_count()) {

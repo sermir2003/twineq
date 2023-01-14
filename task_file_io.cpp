@@ -6,14 +6,21 @@
 
 using Json = nlohmann::json;
 
-Json file_content = {{"kernel", {{"type", "Exponential"}, {"A", "1"}, {"B", "1"}}},
-                     {"b", "1"},
-                     {"d'", "1"},
-                     {"r", "20"},
-                     {"grid count", "5001"},
-                     {"iteration count", "1000"},
-                     {"path to result file", "plot.txt"},
-                     {"Integration method", "Column"}};
+Json file_content = {
+    {"kernel", {
+                   {"type", "Exponential"},
+                   {"A", "1"},
+                   {"B", "1"}}
+    },
+    {"b", "1"},
+    {"d'", "1"},
+    {"r", "20"},
+    {"grid count", "5001"},
+    {"iteration count", "1000"},
+    {"path to result file", "plot.txt"},
+    {"Integration method", "Column"},
+    {"Solver method", "Manual"}
+};
 
 void TaskFileIO::CreateFile(const std::string& path_to_file) {
     std::ofstream file(path_to_file, std::ios::out);
@@ -47,8 +54,12 @@ Task TaskFileIO::ParseTaskFile(const std::string& path_to_file) {
         if (int_method != "Column" && int_method != "Trapezoid" && int_method != "Simpsons") {
             throw TaskFileParseException("Unknown integration method.");
         }
-        return Task(std::move(kernels), b, s, r, grid_count, iteration_count,
-                       path_to_result_file, int_method);
+        std::string solver_method = data_json["Solver method"].get<std::string>();
+        if (solver_method != "Manual" && solver_method != "Matrix") {
+            throw TaskFileParseException("Unknown solver.");
+        }
+        return Task(std::move(kernels), b, s, r, grid_count, iteration_count, path_to_result_file,
+                    int_method, solver_method);
     } catch (const nlohmann::json_abi_v3_11_2::detail::type_error& exception) {
         if (std::string(exception.what()) ==
             "[json.exception.type_error.302] type must be string, but is null") {

@@ -20,11 +20,12 @@ private:
     size_t iter_count_;  /// number of iterations
     std::string path_to_result_file_;  /// just path to result file
     std::string integration_method_;   /// the method that should be used for integration
+    std::string solver_method_;   /// the solver
 public:
     Task() = delete;
     Task(std::unique_ptr<Kernels> kernels, double b, double s, double r, size_t grid_count,
             size_t iter_count, const std::string& path_to_result_file,
-            const std::string& integration_method);
+            const std::string& integration_method, const std::string& solver_method);
 
     double m(double x) const;
     double w(double x) const;
@@ -37,4 +38,5 @@ public:
     size_t iter_count() const;
     const std::string& PathToResFile() const;
     const std::string& IntegrationMethod() const;
+    const std::string& SolverMethod() const;
 };

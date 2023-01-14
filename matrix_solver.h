@@ -4,17 +4,19 @@
 #include "integrators.h"
 #include "progress_counter.h"
 
-class ManualSolver {
+class SimpleMatrixSolver {
 private:
     Task data_;
     std::vector<double> f_;
     std::vector<double> c_;
     std::vector<double> c_next_;
-    std::unique_ptr<Integrator> integrator_;
+    std::vector<double> matrix_;
 private:
     void PerformCalculation();  // Probably should be turned off from the constructor
     void ConstructFunction();
+    void ConstructMatrixColumn();
+    void MultiplyMatrixByVector();
     void SaveResults();
 public:
-    ManualSolver(Task&& task);
+    SimpleMatrixSolver(Task&& task);
 };
