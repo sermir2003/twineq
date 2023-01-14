@@ -1,8 +1,9 @@
 #include "input_subsystem.h"
 #include "input_request.h"
-#include "problem_file_io.h"
+#include "task_file_io.h"
+#include <iostream>
 
-std::vector<std::string> InputSubsystem::Tokenize(size_t argc, char *argv[]) {
+std::vector<std::string> InputSubsystem::Tokenize(size_t argc, char* argv[]) {
     std::vector<std::string> strings(argc);
     for (size_t i = 0; i < argc; ++i) {
         strings[i] = std::string(argv[i]);
@@ -10,7 +11,7 @@ std::vector<std::string> InputSubsystem::Tokenize(size_t argc, char *argv[]) {
     return strings;
 }
 
-std::unique_ptr<InputRequest> InputSubsystem::Parse(size_t argc, char *argv[]) {
+std::unique_ptr<InputRequest> InputSubsystem::Parse(size_t argc, char* argv[]) {
     std::string program_name = std::string(argv[0]);
     --argc;
     argv = &argv[1];
@@ -25,21 +26,31 @@ std::unique_ptr<InputRequest> InputSubsystem::Parse(size_t argc, char *argv[]) {
                                      "or nothing to create a file with the default name. However, "
                                      "the number of parameters is not conducive to this.");
             } else if (tokens.size() == 2) {
-                return std::make_unique<RequestCreateProblemFile>(tokens[1]);
+                return std::make_unique<RequestCreateTaskFile>(tokens[1]);
             } else if (tokens.size() == 1) {
-                return std::make_unique<RequestCreateProblemFile>(kProblemFileDefaultName);
+                return std::make_unique<RequestCreateTaskFile>(kTaskFileDefaultName);
             }
         } else if (tokens[0] == "solve") {
             if (tokens.size() > 2) {
                 throw ParseException(
-                    "The 'solve' should be followed by the path to the Problem File or nothing to "
+                    "The 'solve' should be followed by the path to the Task File or nothing to "
                     "use a file with a default name. However, the number of parameters is not "
                     "conducive to this.");
             } else if (tokens.size() == 2) {
-                return std::make_unique<RequestSolve>(ProblemFileIO::ParseProblemFile(tokens[1]));
+                try {
+                    return std::make_unique<RequestSolve>(TaskFileIO::ParseTaskFile(tokens[1]));
+                } catch (const TaskFileParseException& exception) {
+                    std::cout << "ERROR: incorrect task file\n" << exception.what() << std::endl;
+                    exit(0);
+                }
             } else if (tokens.size() == 1) {
-                return std::make_unique<RequestSolve>(
-                    ProblemFileIO::ParseProblemFile(kProblemFileDefaultName));
+                try {
+                    return std::make_unique<RequestSolve>(
+                        TaskFileIO::ParseTaskFile(kTaskFileDefaultName));
+                } catch (const TaskFileParseException& exception) {
+                    std::cout << "ERROR: incorrect task file\n" << exception.what() << std::endl;
+                    exit(0);
+                }
             }
         } else if (tokens[0] == "-h" || tokens[0] == "--help") {
             if (tokens.size() != 1) {

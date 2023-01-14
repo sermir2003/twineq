@@ -10,6 +10,6 @@ include(FetchContent)
 FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz)
 FetchContent_MakeAvailable(json)
 
-add_executable(twineq main.cpp input_request.h problem.cpp problem.h kernels.cpp kernels.h input_subsystem.cpp input_subsystem.h problem_file_io.cpp problem_file_io.h solver.cpp solver.h)
+add_executable(twineq main.cpp input_request.h task.cpp task.h kernels.cpp kernels.h input_subsystem.cpp input_subsystem.h task_file_io.cpp task_file_io.h solver.cpp solver.h integrators.cpp integrators.h integrators.h)
 
 target_link_libraries(twineq PRIVATE nlohmann_json::nlohmann_json)

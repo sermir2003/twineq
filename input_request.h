@@ -1,9 +1,9 @@
 #pragma once
 #include <string>
-#include "problem.h"
+#include "task.h"
 
 enum class InputRequestType {
-    CREATE_PROBLEM_FILE,
+    CREATE_TASK_FILE,
     SOLVE,
     HELP,
 };
@@ -14,16 +14,16 @@ struct InputRequest {
     }
 };
 
-struct RequestCreateProblemFile : public InputRequest {
+struct RequestCreateTaskFile : public InputRequest {
     InputRequestType GetType() override {
-        return InputRequestType::CREATE_PROBLEM_FILE;
+        return InputRequestType::CREATE_TASK_FILE;
     }
-    std::string path_to_problem_file;
-    RequestCreateProblemFile(const std::string& in_path_to_problem_file)
-        : path_to_problem_file(in_path_to_problem_file) {
+    std::string path_to_task_file;
+    RequestCreateTaskFile(const std::string& path_to_task_file)
+        : path_to_task_file(path_to_task_file) {
     }
-    RequestCreateProblemFile(std::string&& in_path_to_problem_file)
-        : path_to_problem_file(std::move(in_path_to_problem_file)) {
+    RequestCreateTaskFile(std::string&& path_to_task_file)
+        : path_to_task_file(std::move(path_to_task_file)) {
     }
 };
 
@@ -31,8 +31,8 @@ struct RequestSolve : public InputRequest {
     InputRequestType GetType() override {
         return InputRequestType::SOLVE;
     }
-    Problem problem;
-    RequestSolve(Problem&& in_problem) : problem(std::move(in_problem)) {
+    Task task;
+    RequestSolve(Task&& in_task) : task(std::move(in_task)) {
     }
 };
 
