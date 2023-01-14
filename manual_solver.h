@@ -1,7 +1,6 @@
 #pragma once
 #include <vector>
 #include "task.h"
-#include <chrono>
 #include "integrators.h"
 #include "progress_counter.h"
 
@@ -17,9 +16,5 @@ private:
     void ConstructFunction();
     void SaveResults();
 public:
-    friend Integrator;
-    friend ColumnMethod;
-    friend TrapezoidMethod;
-    friend SimpsonsMethod;
     ManualSolver(Task&& problem);
 };
