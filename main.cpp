@@ -1,9 +1,9 @@
 #include <iostream>
 #include <string>
-#include "input_subsystem.h"
-#include "solver.h"
-#include "task_file_io.h"
 #include <memory>
+#include "input_subsystem.h"
+#include "task_file_io.h"
+#include "solution_launcher.h"
 
 int main(int argc, char* argv[]) {
     std::unique_ptr<InputRequest> request;
@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
             static_cast<RequestCreateTaskFile*>(request.get())->path_to_task_file);
     }
     else if (request->GetType() == InputRequestType::SOLVE) {
-        Solver solver_instance(std::move(static_cast<RequestSolve*>(request.get())->task));
+        SolutionLauncher(std::move(static_cast<RequestSolve*>(request.get())->task));
     }
     else if (request->GetType() == InputRequestType::HELP) {
         std::cout << "The developer of this program needs help himself.\n"

@@ -5,7 +5,7 @@
 #include "integrators.h"
 #include "progress_counter.h"
 
-class Solver {
+class ManualSolver {
 private:
     Task data_;
     std::vector<double> f_;
@@ -21,5 +21,5 @@ public:
     friend ColumnMethod;
     friend TrapezoidMethod;
     friend SimpsonsMethod;
-    Solver(Task&& problem);
+    ManualSolver(Task&& problem);
 };

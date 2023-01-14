@@ -1,9 +1,9 @@
-#include "solver.h"
+#include "manual_solver.h"
 #include <fstream>
 #include <iostream>
 #include <iomanip>
 
-Solver::Solver(Task&& problem)
+ManualSolver::ManualSolver(Task&& problem)
     : data_(std::move(problem)),
       f_(data_.grid_count()),
       c_(data_.grid_count()),
@@ -18,7 +18,7 @@ Solver::Solver(Task&& problem)
     ConstructFunction();
     PerformCalculation();
 }
-void Solver::ConstructFunction() {
+void ManualSolver::ConstructFunction() {
     std::cout << "Construct function..." << std::endl;
     double x = -data_.r();
     for (size_t i = 0; i < (data_.grid_count() + 1) / 2; ++i) {
@@ -29,7 +29,7 @@ void Solver::ConstructFunction() {
     }
     std::cout << "Construct function --- Done!" << std::endl;
 }
-void Solver::PerformCalculation() {
+void ManualSolver::PerformCalculation() {
     ProgressCounter calc_progress("Calculation");
     for (size_t i = 0; i < data_.grid_count(); ++i) {
         c_[i] = f_[i];
@@ -48,7 +48,7 @@ void Solver::PerformCalculation() {
     calc_progress.FinishAction();
     SaveResults();
 }
-void Solver::SaveResults() {
+void ManualSolver::SaveResults() {
     std::ofstream file(data_.PathToResFile(), std::ios::out);
     double x = -data_.r();
     for (size_t i = 0; i < data_.grid_count(); ++i) {
