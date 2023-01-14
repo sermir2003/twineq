@@ -4,7 +4,7 @@
 
 typedef std::chrono::time_point<std::chrono::high_resolution_clock> Time;
 
-static const std::string kBleachingLine = "\r" + std::string(100, ' ') + '\r';
+static const std::string kBleachingLine = "\r" + std::string(70, ' ') + '\r';
 
 ProgressCounter::ProgressCounter(const std::string& action_name) : action_name_(action_name) {
     std::cout << action_name_ << " started" << std::endl;
