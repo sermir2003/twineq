@@ -2,9 +2,6 @@
 #include <fstream>
 #include <iostream>
 #include <iomanip>
-#include <chrono>
-
-typedef std::chrono::time_point<std::chrono::high_resolution_clock> Time;
 
 Solver::Solver(Task&& problem)
     : data_(std::move(problem)),
@@ -33,7 +30,7 @@ void Solver::ConstructFunction() {
     std::cout << "Construct function --- Done!" << std::endl;
 }
 void Solver::PerformCalculation() {
-    InitProgress();
+    ProgressCounter calc_progress("Calculation");
     for (size_t i = 0; i < data_.grid_count(); ++i) {
         c_[i] = f_[i];
     }
@@ -46,9 +43,9 @@ void Solver::PerformCalculation() {
             x += data_.step_size();
         }
         std::swap(c_, c_next_);
-        UpdateProgress(1.0 * iteration / data_.iter_count());
+        calc_progress.UpdateProgress(1.0 * iteration / data_.iter_count());
     }
-    CompleteProgress();
+    calc_progress.FinishAction();
     SaveResults();
 }
 void Solver::SaveResults() {
@@ -58,29 +55,4 @@ void Solver::SaveResults() {
         file << std::fixed << std::setprecision(9) << x << " " << c_[i] << std::endl;
         x += data_.step_size();
     }
-}
-void Solver::InitProgress() {
-    std::cout << "Calculation started" << std::endl;
-    std::cout << "Progress: 0%" << std::flush;
-    start_time_ = std::chrono::high_resolution_clock::now();
-}
-void Solver::UpdateProgress(double progress) {
-    static const std::string kBleachingLine = "\r" + std::string(100, ' ') + '\r';
-    std::cout << kBleachingLine;
-    Time cur_time = std::chrono::high_resolution_clock::now();
-    auto delta =
-        std::chrono::duration_cast<std::chrono::milliseconds>(cur_time - start_time_).count();
-    auto time_left = 1.0 * delta / progress * (1 - progress);
-    std::cout << "Progress: " << std::fixed << std::setprecision(1) << 100 * progress << "%"
-              << "; time left: " << std::setprecision(0) << time_left / 1000 << " s"
-              << "; time has passed: " << delta / 1000 << " s" << std::flush;
-}
-void Solver::CompleteProgress() {
-    static const std::string kBleachingLine = "\r" + std::string(100, ' ') + '\r';
-    Time cur_time = std::chrono::high_resolution_clock::now();
-    auto delta =
-        std::chrono::duration_cast<std::chrono::milliseconds>(cur_time - start_time_).count();
-    std::cout << kBleachingLine << "Progress: 100%"
-              << "; time has passed: " << std::setprecision(0) << delta / 1000 << " s" << std::endl;
-    std::cout << "Calculation finished" << std::endl;
 }
