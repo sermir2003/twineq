@@ -4,60 +4,6 @@
 #include <iomanip>
 #include <chrono>
 
-ColumnMethod::ColumnMethod(Solver& solver) : Integrator(solver) {
-}
-double ColumnMethod::Integrate(double x) {
-    double integral = 0;
-    double depends_only_on_x =
-        solver_.data_.b() / (solver_.data_.b() + solver_.data_.s() * solver_.data_.w(x));
-    double y = -solver_.data_.r();
-    for (size_t j = 0; j < solver_.data_.grid_count(); ++j) {
-        integral += ((j == 0 || j == solver_.data_.iter_count() - 1) ? 0.5 : 1) *
-                    solver_.data_.m(x - y) * solver_.c_[j];
-        y += solver_.data_.step_size();
-    }
-    integral *= solver_.data_.step_size();
-    integral *= depends_only_on_x;
-    return integral;
-}
-
-TrapezoidMethod::TrapezoidMethod(Solver& solver) : Integrator(solver) {
-}
-double TrapezoidMethod::Integrate(double x) {
-    double integral = 0;
-    double y = -solver_.data_.r();
-    for (size_t j = 0; j < solver_.data_.grid_count(); ++j) {
-        integral += ((j == 0 || j == solver_.data_.iter_count() - 1) ? 0.5 : 1) *
-                    solver_.data_.m(x - y) * solver_.c_[j];
-        y += solver_.data_.step_size();
-    }
-    integral *= solver_.data_.step_size();
-    double depends_only_on_x =
-        solver_.data_.b() / (solver_.data_.b() + solver_.data_.s() * solver_.data_.w(x));
-    integral *= depends_only_on_x;
-    return integral;
-}
-
-SimpsonsMethod::SimpsonsMethod(Solver& solver) : Integrator(solver) {
-}
-double SimpsonsMethod::Integrate(double x) {
-    // TODO: maybe one linear iterating with if is better than three without?
-    double integral = 0;
-    double y = -solver_.data_.r();
-    for (size_t j = 0; j < solver_.data_.grid_count(); ++j) {
-        integral += ((j == 0 || j == solver_.data_.grid_count() - 1) ? 1
-                     : (j % 2 == 1)                                  ? 4
-                                                                     : 2) *
-                    solver_.data_.m(x - y) * solver_.c_[j];
-        y += solver_.data_.step_size();
-    }
-    integral *= solver_.data_.step_size() / 3;
-    double depends_only_on_x =
-        solver_.data_.b() / (solver_.data_.b() + solver_.data_.s() * solver_.data_.w(x));
-    integral *= depends_only_on_x;
-    return integral;
-}
-
 typedef std::chrono::time_point<std::chrono::high_resolution_clock> Time;
 
 Solver::Solver(Task&& problem)
@@ -66,11 +12,11 @@ Solver::Solver(Task&& problem)
       c_(data_.grid_count()),
       c_next_(data_.grid_count()) {
     if (data_.IntegrationMethod() == "Column") {
-        integrator_ = std::make_unique<ColumnMethod>(*this);
+        integrator_ = std::make_unique<ColumnMethod>(data_, c_);
     } else if (data_.IntegrationMethod() == "Trapezoid") {
-        integrator_ = std::make_unique<TrapezoidMethod>(*this);
+        integrator_ = std::make_unique<TrapezoidMethod>(data_, c_);
     } else if (data_.IntegrationMethod() == "Simpsons") {
-        integrator_ = std::make_unique<SimpsonsMethod>(*this);
+        integrator_ = std::make_unique<SimpsonsMethod>(data_, c_);
     }
     ConstructFunction();
     PerformCalculation();
