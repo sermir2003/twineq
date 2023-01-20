@@ -8,9 +8,8 @@ using Json = nlohmann::json;
 
 Json file_content = {
     {"kernel", {
-                   {"type", "Exponential"},
-                   {"A", "1"},
-                   {"B", "1"}}
+        {"type", "Exponential"},
+        {"A", "1"}, {"B", "1"}}
     },
     {"b", "1"},
     {"d'", "1"},
@@ -19,7 +18,8 @@ Json file_content = {
     {"iteration count", "1000"},
     {"path to result file", "plot.txt"},
     {"Integration method", "Column"},
-    {"Solver method", "Manual"}
+    {"Solver method", "Manual"},
+    {"Number of threads", "1"}
 };
 
 void TaskFileIO::CreateFile(const std::string& path_to_file) {
@@ -55,11 +55,13 @@ Task TaskFileIO::ParseTaskFile(const std::string& path_to_file) {
             throw TaskFileParseException("Unknown integration method.");
         }
         std::string solver_method = data_json["Solver method"].get<std::string>();
-        if (solver_method != "Manual" && solver_method != "Matrix") {
+        if (solver_method != "Manual" && solver_method != "Matrix" &&
+            solver_method != "Multithreading matrix") {
             throw TaskFileParseException("Unknown solver.");
         }
+        size_t number_threads = std::stoi(data_json["Number of threads"].get<std::string>());
         return Task(std::move(kernels), b, s, r, grid_count, iteration_count, path_to_result_file,
-                    int_method, solver_method);
+                    int_method, solver_method, number_threads);
     } catch (const nlohmann::json_abi_v3_11_2::detail::type_error& exception) {
         if (std::string(exception.what()) ==
             "[json.exception.type_error.302] type must be string, but is null") {

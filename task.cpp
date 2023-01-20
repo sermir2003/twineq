@@ -2,7 +2,7 @@
 
 Task::Task(std::unique_ptr<Kernels> kernels, double b, double s, double r, size_t grid_count,
                  size_t iter_count, const std::string& path_to_result_file,
-                 const std::string& integration_method, const std::string& solver_method)
+                 const std::string& integration_method, const std::string& solver_method, size_t number_threads)
     : kernels_(std::move(kernels)),
       b_(b),
       s_(s),
@@ -11,7 +11,8 @@ Task::Task(std::unique_ptr<Kernels> kernels, double b, double s, double r, size_
       iter_count_(iter_count),
       path_to_result_file_(path_to_result_file),
       integration_method_(integration_method),
-      solver_method_(solver_method) {
+      solver_method_(solver_method),
+      number_threads_(number_threads) {
     step_size_ = 2 * r_ / (grid_count_ - 1);
 }
 double Task::m(double x) const {
@@ -49,4 +50,7 @@ const std::string& Task::IntegrationMethod() const {
 }
 const std::string& Task::SolverMethod() const {
     return solver_method_;
+}
+size_t Task::NumberOfThreads() const {
+    return number_threads_;
 }

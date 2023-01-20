@@ -1,6 +1,7 @@
 #include "solution_launcher.h"
 #include "manual_solver.h"
 #include "matrix_solver.h"
+#include "multithread_matrix_solver.h"
 
 void SolutionLauncher(Task&& task) {
     if (task.SolverMethod() == "Manual") {
@@ -8,5 +9,8 @@ void SolutionLauncher(Task&& task) {
     }
     else if (task.SolverMethod() == "Matrix") {
         SimpleMatrixSolver instance(std::move(task));
+    }
+    else if (task.SolverMethod() == "Multithreading matrix") {
+        MultithreadingMatrixSolver instance(std::move(task));
     }
 }
