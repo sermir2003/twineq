@@ -1,7 +1,7 @@
 #include "task.h"
 
 Task::Task(std::unique_ptr<Kernels> kernels, double b, double s, double r, size_t grid_count,
-                 size_t iter_count, const std::string& path_to_result_file,
+                 size_t iter_count, std::unique_ptr<ResultsSaver> res_saver,
                  const std::string& integration_method, const std::string& solver_method)
     : kernels_(std::move(kernels)),
       b_(b),
@@ -9,7 +9,7 @@ Task::Task(std::unique_ptr<Kernels> kernels, double b, double s, double r, size_
       r_(r),
       grid_count_(grid_count),
       iter_count_(iter_count),
-      path_to_result_file_(path_to_result_file),
+      res_saver_(std::move(res_saver)),
       integration_method_(integration_method),
       solver_method_(solver_method) {
     step_size_ = 2 * r_ / (grid_count_ - 1);
@@ -41,8 +41,8 @@ size_t Task::iter_count() const {
 double Task::N() const {
     return kernels_->getN();
 }
-const std::string& Task::PathToResFile() const {
-    return path_to_result_file_;
+const void Task::SaveResults(const std::vector<double>& c) const {
+    res_saver_->Save(c);
 }
 const std::string& Task::IntegrationMethod() const {
     return integration_method_;

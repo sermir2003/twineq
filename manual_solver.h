@@ -14,7 +14,6 @@ private:
 private:
     void PerformCalculation();  // Probably should be turned off from the constructor
     void ConstructFunction();
-    void SaveResults();
 public:
     ManualSolver(Task&& task);
 };

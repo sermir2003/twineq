@@ -16,7 +16,6 @@ private:
     void ConstructFunction();
     void ConstructMatrixColumn();
     void MultiplyMatrixByVector();
-    void SaveResults();
 public:
     SimpleMatrixSolver(Task&& task);
 };

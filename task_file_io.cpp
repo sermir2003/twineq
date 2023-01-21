@@ -3,6 +3,7 @@
 #include <fstream>
 #include "kernels.h"
 #include <memory>
+#include "results_saver.h"
 
 using Json = nlohmann::json;
 
@@ -58,7 +59,8 @@ Task TaskFileIO::ParseTaskFile(const std::string& path_to_file) {
         if (solver_method != "Manual" && solver_method != "Matrix") {
             throw TaskFileParseException("Unknown solver.");
         }
-        return Task(std::move(kernels), b, s, r, grid_count, iteration_count, path_to_result_file,
+        std::unique_ptr<ResultsSaver> res_saver = std::make_unique<FileResultsSaver>(grid_count, r, path_to_result_file);
+        return Task(std::move(kernels), b, s, r, grid_count, iteration_count, std::move(res_saver),
                     int_method, solver_method);
     } catch (const nlohmann::json_abi_v3_11_2::detail::type_error& exception) {
         if (std::string(exception.what()) ==
