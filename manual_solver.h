@@ -6,7 +6,7 @@
 
 class ManualSolver {
 private:
-    Task data_;
+    const Task& data_;
     std::vector<double> f_;
     std::vector<double> c_;
     std::vector<double> c_next_;
@@ -18,6 +18,6 @@ private:
     void SaveResults();
 
 public:
-    ManualSolver(Task&& task, const std::string& calculation_name);
+    ManualSolver(const Task& task, const std::string& calculation_name);
     std::vector<double> PerformCalculation();  // Probably should be turned off from the constructor
 };

@@ -3,7 +3,7 @@
 #include <iostream>
 #include <iomanip>
 
-ManualSolver::ManualSolver(Task&& task, const std::string& calculation_name)
+ManualSolver::ManualSolver(const Task& task, const std::string& calculation_name)
     : data_(std::move(task)),
       f_(data_.grid_count()),
       c_(data_.grid_count()),
