@@ -3,7 +3,6 @@
 #include <memory>
 #include "task_file_io.h"
 #include "kernels.h"
-#include "results_saver.h"
 
 using Json = nlohmann::json;
 
@@ -76,10 +75,8 @@ Task TaskFileIO::ParseTaskFile(const std::string& path_to_file) {
             throw TaskFileParseException("Unknown integration method.");
         }
         double N = kernels->getN();
-        std::unique_ptr<ResultsSaver> res_saver =
-            std::make_unique<FileResultsSaver>(grid_count, r, path_to_result_file);
         return Task(b, s, r, N, grid_count, iteration_count, std::move(kernels),
-                    std::move(res_saver), type_of_integrator, type_of_problem);
+                    true, path_to_result_file, type_of_integrator, type_of_problem);
     } catch (const nlohmann::json_abi_v3_11_2::detail::type_error& exception) {
         if (std::string(exception.what()) ==
             "[json.exception.type_error.302] type must be string, but is null") {

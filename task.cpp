@@ -27,15 +27,13 @@ size_t Task::iter_count() const {
 double Task::N() const {
     return N_;
 }
-const void Task::SaveResults(const std::vector<double>& c) const {
-    res_saver_->Save(c);
-}
 IntegratorType Task::GetIntegrationMethod() const {
     return integration_method_;
 }
 Task::Task(double b, double s, double r, double N, size_t grid_count, size_t iter_count,
-           std::unique_ptr<Kernels> kernels, std::unique_ptr<ResultsSaver> res_saver,
-           IntegratorType integration_method, ProblemType problem)
+           std::unique_ptr<Kernels> kernels, bool save_c_to_file,
+           const std::string& path_to_result_file, IntegratorType integration_method,
+           ProblemType problem)
     : b_(b),
       s_(s),
       r_(r),
@@ -43,7 +41,8 @@ Task::Task(double b, double s, double r, double N, size_t grid_count, size_t ite
       grid_count_(grid_count),
       iter_count_(iter_count),
       kernels_(std::move(kernels)),
-      res_saver_(std::move(res_saver)),
+      save_c_to_file_(save_c_to_file),
+      path_to_result_file_(path_to_result_file),
       integration_method_(integration_method),
       problem_(problem) {
     step_size_ = 2 * r_ / (grid_count_ - 1);
@@ -59,7 +58,8 @@ Task::Task(const Task& other)
       grid_count_(other.grid_count_),
       iter_count_(other.iter_count_),
       kernels_(other.kernels_->Clone()),
-      res_saver_(other.res_saver_->Clone()),
+      save_c_to_file_(other.save_c_to_file_),
+      path_to_result_file_(other.path_to_result_file_),
       integration_method_(other.integration_method_),
       problem_(other.problem_) {
 }
@@ -72,4 +72,10 @@ Task& Task::operator=(const Task& other) {
 }
 std::unique_ptr<Kernels> Task::CloneKernels() const {
     return kernels_->Clone();
+}
+bool Task::GetSaveToFile() const {
+    return save_c_to_file_;
+}
+std::string Task::PathToResultFile() const {
+    return path_to_result_file_;
 }

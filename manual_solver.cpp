@@ -1,4 +1,5 @@
 #include "manual_solver.h"
+#include <fstream>
 #include <iostream>
 #include <iomanip>
 
@@ -47,6 +48,14 @@ std::vector<double> ManualSolver::PerformCalculation() {
         calc_progress.UpdateProgress(1.0 * iteration / data_.iter_count());
     }
     calc_progress.FinishAction();
-    data_.SaveResults(c_);
+
     return c_;
+}
+void ManualSolver::SaveResults() {
+    std::ofstream file(data_.PathToResultFile(), std::ios::out);
+    double x = -data_.r();
+    for (size_t i = 0; i < data_.grid_count(); ++i) {
+        file << std::fixed << std::setprecision(9) << x << " " << c_[i] << std::endl;
+        x += data_.step_size();
+    }
 }

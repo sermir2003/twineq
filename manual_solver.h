@@ -15,6 +15,7 @@ private:
 
 private:
     void ConstructFunction();
+    void SaveResults();
 
 public:
     ManualSolver(Task&& task, const std::string& calculation_name);
