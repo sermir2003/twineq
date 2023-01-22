@@ -16,6 +16,7 @@ private:
     double b_;                          /// intrinsic rates of birth
     double s_;                          /// the same as d'
     double r_;                          /// segment size: [-r; r]
+    double N_;                          /// Control parameter
     size_t grid_count_;  /// the number of grid nodes for which calculations are performed
     double step_size_;   /// the scale of the grid of nodes for which calculations are performed
     size_t iter_count_;  /// number of iterations
@@ -24,7 +25,7 @@ private:
     std::string solver_method_;   /// the solver
 public:
     Task() = delete;
-    Task(std::unique_ptr<Kernels> kernels, double b, double s, double r, size_t grid_count,
+    Task(std::unique_ptr<Kernels> kernels, double b, double s, double r, double N, size_t grid_count,
             size_t iter_count, std::unique_ptr<ResultsSaver> res_saver,
             const std::string& integration_method, const std::string& solver_method);
 

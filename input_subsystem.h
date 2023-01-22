@@ -8,11 +8,13 @@
 class InputSubsystem {
 public:
     static std::unique_ptr<InputRequest> Parse(size_t argc, char *argv[]);
+
 private:
     static std::vector<std::string> Tokenize(size_t argc, char *argv[]);
 };
 
 class ParseException : public std::runtime_error {
 public:
-    ParseException(const std::string& error_message) : std::runtime_error(error_message) {}
+    ParseException(const std::string &error_message) : std::runtime_error(error_message) {
+    }
 };

@@ -7,21 +7,15 @@
 
 using Json = nlohmann::json;
 
-Json file_content = {
-    {"kernel", {
-                   {"type", "Exponential"},
-                   {"A", "1"},
-                   {"B", "1"}}
-    },
-    {"b", "1"},
-    {"d'", "1"},
-    {"r", "20"},
-    {"grid count", "5001"},
-    {"iteration count", "1000"},
-    {"path to result file", "plot.txt"},
-    {"Integration method", "Column"},
-    {"Solver method", "Manual"}
-};
+Json file_content = {{"kernel", {{"type", "Exponential"}, {"A", "1"}, {"B", "1"}}},
+                     {"b", "1"},
+                     {"d'", "1"},
+                     {"r", "20"},
+                     {"grid count", "5001"},
+                     {"iteration count", "1000"},
+                     {"path to result file", "plot.txt"},
+                     {"Integration method", "Column"},
+                     {"Solver method", "Manual"}};
 
 void TaskFileIO::CreateFile(const std::string& path_to_file) {
     std::ofstream file(path_to_file, std::ios::out);
@@ -37,11 +31,11 @@ Task TaskFileIO::ParseTaskFile(const std::string& path_to_file) {
         if (data_json["kernel"]["type"].get<std::string>() == "Exponential") {
             double A = std::stod(data_json["kernel"]["A"].get<std::string>());
             double B = std::stod(data_json["kernel"]["A"].get<std::string>());
-            kernels = std::make_unique<ExpKernels>(A, B);
+            kernels = std::make_unique<DanchenkoExpKernels>(A, B);
         } else if (data_json["kernel"]["type"].get<std::string>() == "Rational") {
             double A = std::stod(data_json["kernel"]["A"].get<std::string>());
             double p = std::stod(data_json["kernel"]["p"].get<std::string>());
-            kernels = std::make_unique<RationalKernels>(A, p);
+            kernels = std::make_unique<DanchenkoRationalKernels>(A, p);
         } else {
             throw TaskFileParseException("Unknown kernel type.");
         }
@@ -59,9 +53,11 @@ Task TaskFileIO::ParseTaskFile(const std::string& path_to_file) {
         if (solver_method != "Manual" && solver_method != "Matrix") {
             throw TaskFileParseException("Unknown solver.");
         }
-        std::unique_ptr<ResultsSaver> res_saver = std::make_unique<FileResultsSaver>(grid_count, r, path_to_result_file);
-        return Task(std::move(kernels), b, s, r, grid_count, iteration_count, std::move(res_saver),
-                    int_method, solver_method);
+        double N = kernels->getN();
+        std::unique_ptr<ResultsSaver> res_saver =
+            std::make_unique<FileResultsSaver>(grid_count, r, path_to_result_file);
+        return Task(std::move(kernels), b, s, r, N, grid_count, iteration_count,
+                    std::move(res_saver), int_method, solver_method);
     } catch (const nlohmann::json_abi_v3_11_2::detail::type_error& exception) {
         if (std::string(exception.what()) ==
             "[json.exception.type_error.302] type must be string, but is null") {
