@@ -1,5 +1,10 @@
 #pragma once
 
+enum class KernelsType {
+    DANCHENKO_RATIONAL,
+    DANCHENKO_EXPKERNEL,
+};
+
 /**
  * Abstract class for birth and death kernels
  */

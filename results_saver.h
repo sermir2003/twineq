@@ -2,6 +2,11 @@
 #include <vector>
 #include <string>
 
+enum class ResultsSaverType {
+    FILE,
+    NOP,
+};
+
 class ResultsSaver {
 protected:
     double grid_count_;

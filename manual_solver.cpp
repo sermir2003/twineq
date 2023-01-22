@@ -7,11 +7,11 @@ ManualSolver::ManualSolver(Task&& task)
       f_(data_.grid_count()),
       c_(data_.grid_count()),
       c_next_(data_.grid_count()) {
-    if (data_.IntegrationMethod() == "Column") {
+    if (data_.IntegrationMethod() == IntegratorType::COLUMN) {
         integrator_ = std::make_unique<ColumnMethod>(data_, c_);
-    } else if (data_.IntegrationMethod() == "Trapezoid") {
+    } else if (data_.IntegrationMethod() == IntegratorType::TRAPEZOID) {
         integrator_ = std::make_unique<TrapezoidMethod>(data_, c_);
-    } else if (data_.IntegrationMethod() == "Simpsons") {
+    } else if (data_.IntegrationMethod() == IntegratorType::SIMPSONS) {
         integrator_ = std::make_unique<SimpsonsMethod>(data_, c_);
     }
     ConstructFunction();

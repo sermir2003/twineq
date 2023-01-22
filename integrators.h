@@ -1,4 +1,5 @@
 #pragma once
+#include "integrator_types.h"
 #include "task.h"
 #include <vector>
 
