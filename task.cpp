@@ -35,7 +35,7 @@ IntegratorType Task::IntegrationMethod() const {
 }
 Task::Task(double b, double s, double r, double N, size_t grid_count, size_t iter_count,
            std::unique_ptr<Kernels> kernels, std::unique_ptr<ResultsSaver> res_saver,
-           IntegratorType integration_method)
+           IntegratorType integration_method, ProblemType problem)
     : b_(b),
       s_(s),
       r_(r),
@@ -44,6 +44,7 @@ Task::Task(double b, double s, double r, double N, size_t grid_count, size_t ite
       iter_count_(iter_count),
       kernels_(std::move(kernels)),
       res_saver_(std::move(res_saver)),
-      integration_method_(integration_method) {
+      integration_method_(integration_method),
+      problem_(problem) {
     step_size_ = 2 * r_ / (grid_count_ - 1);
 }

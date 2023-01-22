@@ -7,6 +7,11 @@
 #include <memory>
 #include <vector>
 
+enum class ProblemType {
+    TWIN_EQUATION,
+    ORIGINAL_EQUATION,
+};
+
 /**
  * Class for holding biological and technical parameters of the current task
  */
@@ -22,11 +27,13 @@ private:
     std::unique_ptr<Kernels> kernels_;         /// birth and death kernels
     std::unique_ptr<ResultsSaver> res_saver_;  /// class for saving c_
     IntegratorType integration_method_;        /// the method that should be used for integration
+    ProblemType problem_;
+
 public:
     Task() = delete;
     Task(double b, double s, double r, double N, size_t grid_count, size_t iter_count,
          std::unique_ptr<Kernels> kernels, std::unique_ptr<ResultsSaver> res_saver,
-         IntegratorType integration_method);
+         IntegratorType integration_method, ProblemType problem);
 
     double m(double x) const;
     double w(double x) const;
