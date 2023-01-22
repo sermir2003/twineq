@@ -18,7 +18,6 @@ ManualSolver::ManualSolver(Task&& task, const std::string& calculation_name)
     }
     ConstructFunction();
     std::cout << "Initialization of " << calculation_name << " --- Done!" << std::endl;
-    PerformCalculation();
 }
 void ManualSolver::ConstructFunction() {
     std::cout << "Construct function..." << std::endl;
@@ -31,7 +30,7 @@ void ManualSolver::ConstructFunction() {
     }
     std::cout << "Construct function --- Done!" << std::endl;
 }
-void ManualSolver::PerformCalculation() {
+std::vector<double> ManualSolver::PerformCalculation() {
     ProgressCounter calc_progress(calculation_name_);
     for (size_t i = 0; i < data_.grid_count(); ++i) {
         c_[i] = f_[i];
@@ -49,4 +48,5 @@ void ManualSolver::PerformCalculation() {
     }
     calc_progress.FinishAction();
     data_.SaveResults(c_);
+    return c_;
 }

@@ -70,3 +70,6 @@ Task& Task::operator=(const Task& other) {
     *this = Task(other);
     return *this;
 }
+std::unique_ptr<Kernels> Task::CloneKernels() const {
+    return kernels_->Clone();
+}

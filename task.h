@@ -51,4 +51,5 @@ public:
     const void SaveResults(const std::vector<double>& c) const;
     IntegratorType GetIntegrationMethod() const;
     ProblemType GetProblem() const;
+    std::unique_ptr<Kernels> CloneKernels() const;
 };

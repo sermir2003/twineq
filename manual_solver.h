@@ -14,9 +14,9 @@ private:
     std::string calculation_name_;
 
 private:
-    void PerformCalculation();  // Probably should be turned off from the constructor
     void ConstructFunction();
 
 public:
     ManualSolver(Task&& task, const std::string& calculation_name);
+    std::vector<double> PerformCalculation();  // Probably should be turned off from the constructor
 };
