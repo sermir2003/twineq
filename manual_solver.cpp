@@ -2,11 +2,13 @@
 #include <iostream>
 #include <iomanip>
 
-ManualSolver::ManualSolver(Task&& task)
+ManualSolver::ManualSolver(Task&& task, const std::string& calculation_name)
     : data_(std::move(task)),
       f_(data_.grid_count()),
       c_(data_.grid_count()),
-      c_next_(data_.grid_count()) {
+      c_next_(data_.grid_count()),
+      calculation_name_(calculation_name) {
+    std::cout << "Initialization of " << calculation_name << "..." << std::endl;
     if (data_.IntegrationMethod() == IntegratorType::COLUMN) {
         integrator_ = std::make_unique<ColumnMethod>(data_, c_);
     } else if (data_.IntegrationMethod() == IntegratorType::TRAPEZOID) {
@@ -15,6 +17,7 @@ ManualSolver::ManualSolver(Task&& task)
         integrator_ = std::make_unique<SimpsonsMethod>(data_, c_);
     }
     ConstructFunction();
+    std::cout << "Initialization of " << calculation_name << " --- Done!" << std::endl;
     PerformCalculation();
 }
 void ManualSolver::ConstructFunction() {
@@ -29,7 +32,7 @@ void ManualSolver::ConstructFunction() {
     std::cout << "Construct function --- Done!" << std::endl;
 }
 void ManualSolver::PerformCalculation() {
-    ProgressCounter calc_progress("Calculation");
+    ProgressCounter calc_progress(calculation_name_);
     for (size_t i = 0; i < data_.grid_count(); ++i) {
         c_[i] = f_[i];
     }

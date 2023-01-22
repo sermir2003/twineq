@@ -11,11 +11,12 @@ private:
     std::vector<double> c_;
     std::vector<double> c_next_;
     std::unique_ptr<Integrator> integrator_;
+    std::string calculation_name_;
 
 private:
     void PerformCalculation();  // Probably should be turned off from the constructor
     void ConstructFunction();
 
 public:
-    ManualSolver(Task&& task);
+    ManualSolver(Task&& task, const std::string& calculation_name);
 };
