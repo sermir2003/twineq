@@ -16,6 +16,9 @@ double DanchenkoRationalKernels::getN() const {
     double N = (A * M_PI * (A + 5 * p2) * (A + 8 * p2)) / (p * (A * A + 21 * A * p2 + 120 * p2));
     return N;
 }
+std::unique_ptr<Kernels> DanchenkoRationalKernels::Clone() const {
+    return std::make_unique<DanchenkoRationalKernels>(A, p);
+}
 DanchenkoExpKernels::DanchenkoExpKernels(double A, double B) : A(A), B(B) {
 }
 double DanchenkoExpKernels::m(double x) const {
@@ -30,4 +33,7 @@ double DanchenkoExpKernels::w(double x) const {
 double DanchenkoExpKernels::getN() const {
     double N = 2.0 / 3 * B + 52.0 / 27 * A;
     return N;
+}
+std::unique_ptr<Kernels> DanchenkoExpKernels::Clone() const {
+    return std::make_unique<DanchenkoExpKernels>(A, B);
 }

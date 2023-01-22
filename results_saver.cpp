@@ -3,7 +3,8 @@
 #include <iomanip>
 
 FileResultsSaver::FileResultsSaver(double grid_count, double r,
-                                   const std::string& path_to_result_file) : ResultsSaver(grid_count, r), path_to_result_file_(path_to_result_file) {
+                                   const std::string& path_to_result_file)
+    : ResultsSaver(grid_count, r), path_to_result_file_(path_to_result_file) {
 }
 void FileResultsSaver::Save(const std::vector<double>& c) const {
     std::ofstream file(path_to_result_file_, std::ios::out);
@@ -13,8 +14,13 @@ void FileResultsSaver::Save(const std::vector<double>& c) const {
         x += step_size_;
     }
 }
-NopResultsSaver::NopResultsSaver(double grid_count, double r)
-    : ResultsSaver(grid_count, r) {
+std::unique_ptr<ResultsSaver> FileResultsSaver::Clone() const {
+    return std::make_unique<FileResultsSaver>(grid_count_, r_, path_to_result_file_);
+}
+NopResultsSaver::NopResultsSaver(double grid_count, double r) : ResultsSaver(grid_count, r) {
 }
 void NopResultsSaver::Save(const std::vector<double>& c) const {
+}
+std::unique_ptr<ResultsSaver> NopResultsSaver::Clone() const {
+    return std::make_unique<NopResultsSaver>(grid_count_, r_);
 }

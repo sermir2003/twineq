@@ -1,8 +1,9 @@
 #pragma once
+#include <memory>
 
 enum class KernelsType {
     DANCHENKO_RATIONAL,
-    DANCHENKO_EXPKERNEL,
+    DANCHENKO_EXP_KERNEL,
 };
 
 /**
@@ -14,6 +15,7 @@ public:
     virtual double w(double x) const = 0;
     virtual double getN() const = 0;
     virtual ~Kernels();
+    virtual std::unique_ptr<Kernels> Clone() const = 0;
 };
 
 /**
@@ -29,6 +31,7 @@ public:
     double m(double x) const override;
     double w(double x) const override;
     double getN() const override;
+    std::unique_ptr<Kernels> Clone() const override;
 };
 
 /**
@@ -44,4 +47,5 @@ public:
     double m(double x) const override;
     double w(double x) const override;
     double getN() const override;
+    std::unique_ptr<Kernels> Clone() const override;
 };

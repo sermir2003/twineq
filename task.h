@@ -34,6 +34,10 @@ public:
     Task(double b, double s, double r, double N, size_t grid_count, size_t iter_count,
          std::unique_ptr<Kernels> kernels, std::unique_ptr<ResultsSaver> res_saver,
          IntegratorType integration_method, ProblemType problem);
+    Task(const Task& other);
+    Task(Task&& other) = default;
+    Task& operator=(const Task& other);
+    Task& operator=(Task&& other) = default;
 
     double m(double x) const;
     double w(double x) const;

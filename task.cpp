@@ -51,3 +51,22 @@ Task::Task(double b, double s, double r, double N, size_t grid_count, size_t ite
 ProblemType Task::GetProblem() const {
     return problem_;
 }
+Task::Task(const Task& other)
+    : b_(other.b_),
+      s_(other.s_),
+      r_(other.r_),
+      N_(other.N_),
+      grid_count_(other.grid_count_),
+      iter_count_(other.iter_count_),
+      kernels_(other.kernels_->Clone()),
+      res_saver_(other.res_saver_->Clone()),
+      integration_method_(other.integration_method_),
+      problem_(other.problem_) {
+}
+Task& Task::operator=(const Task& other) {
+    if (this == &other) {
+        return *this;
+    }
+    *this = Task(other);
+    return *this;
+}
