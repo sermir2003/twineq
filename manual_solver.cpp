@@ -48,7 +48,9 @@ std::vector<double> ManualSolver::PerformCalculation() {
         calc_progress.UpdateProgress(1.0 * iteration / data_.iter_count());
     }
     calc_progress.FinishAction();
-
+    if (data_.GetSaveToFile()) {
+        SaveResults();
+    }
     return c_;
 }
 void ManualSolver::SaveResults() {
