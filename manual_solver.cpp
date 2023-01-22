@@ -9,11 +9,11 @@ ManualSolver::ManualSolver(Task&& task, const std::string& calculation_name)
       c_next_(data_.grid_count()),
       calculation_name_(calculation_name) {
     std::cout << "Initialization of " << calculation_name << "..." << std::endl;
-    if (data_.IntegrationMethod() == IntegratorType::COLUMN) {
+    if (data_.GetIntegrationMethod() == IntegratorType::COLUMN) {
         integrator_ = std::make_unique<ColumnMethod>(data_, c_);
-    } else if (data_.IntegrationMethod() == IntegratorType::TRAPEZOID) {
+    } else if (data_.GetIntegrationMethod() == IntegratorType::TRAPEZOID) {
         integrator_ = std::make_unique<TrapezoidMethod>(data_, c_);
-    } else if (data_.IntegrationMethod() == IntegratorType::SIMPSONS) {
+    } else if (data_.GetIntegrationMethod() == IntegratorType::SIMPSONS) {
         integrator_ = std::make_unique<SimpsonsMethod>(data_, c_);
     }
     ConstructFunction();

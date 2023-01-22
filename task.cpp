@@ -30,7 +30,7 @@ double Task::N() const {
 const void Task::SaveResults(const std::vector<double>& c) const {
     res_saver_->Save(c);
 }
-IntegratorType Task::IntegrationMethod() const {
+IntegratorType Task::GetIntegrationMethod() const {
     return integration_method_;
 }
 Task::Task(double b, double s, double r, double N, size_t grid_count, size_t iter_count,
@@ -47,4 +47,7 @@ Task::Task(double b, double s, double r, double N, size_t grid_count, size_t ite
       integration_method_(integration_method),
       problem_(problem) {
     step_size_ = 2 * r_ / (grid_count_ - 1);
+}
+ProblemType Task::GetProblem() const {
+    return problem_;
 }

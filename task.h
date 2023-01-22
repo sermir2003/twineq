@@ -45,5 +45,6 @@ public:
     double step_size() const;
     size_t iter_count() const;
     const void SaveResults(const std::vector<double>& c) const;
-    IntegratorType IntegrationMethod() const;
+    IntegratorType GetIntegrationMethod() const;
+    ProblemType GetProblem() const;
 };
