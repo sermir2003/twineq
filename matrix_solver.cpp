@@ -38,7 +38,7 @@ void SimpleMatrixSolver::ConstructMatrixColumn() {
         double y = -data_.r();
         for (size_t j = 0; j < data_.grid_count(); ++j) {
             matrix_[i * data_.grid_count() + j] =
-                ((j == 0 || j == data_.iter_count() - 1) ? 0.5 : 1) * data_.step_size() *
+                ((j == 0 || j == data_.grid_count() - 1) ? 0.5 : 1) * data_.step_size() *
                 data_.b() / (data_.b() + data_.s() * data_.w(x)) * data_.m(x - y);
             y += data_.step_size();
         }
@@ -55,7 +55,7 @@ void SimpleMatrixSolver::MultiplyMatrixByVector() {
         c_next_[data_.grid_count() - i - 1] = c_next_[i];
     }
 }
-void SimpleMatrixSolver::PerformCalculation() {
+std::vector<double> SimpleMatrixSolver::PerformCalculation() {
     ProgressCounter calc_progress(calculation_name_);
     for (size_t i = 0; i < data_.grid_count(); ++i) {
         c_[i] = f_[i];
@@ -70,6 +70,7 @@ void SimpleMatrixSolver::PerformCalculation() {
     }
     calc_progress.FinishAction();
     SaveResults();
+    return c_;
 }
 void SimpleMatrixSolver::SaveResults() {
     std::ofstream file(data_.PathToResultFile(), std::ios::out);

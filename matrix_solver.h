@@ -21,5 +21,5 @@ private:
 
 public:
     SimpleMatrixSolver(const Task& task, const std::string& calculation_name);
-    void PerformCalculation();
+    std::vector<double> PerformCalculation();
 };
