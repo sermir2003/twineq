@@ -22,7 +22,7 @@ SimpleMatrixSolver::SimpleMatrixSolver(const Task& task, const std::string& calc
 }
 void SimpleMatrixSolver::ConstructFunction() {
     std::cout << "Construct function..." << std::endl;
-    double x = -data_.r();
+    Real x = -data_.r();
     for (size_t i = 0; i < (data_.grid_count() + 1) / 2; ++i) {
         f_[i] = (data_.N() * data_.m(x) - data_.s() * data_.w(x)) /
                 (data_.b() + data_.s() * data_.w(x));
@@ -33,9 +33,9 @@ void SimpleMatrixSolver::ConstructFunction() {
 }
 void SimpleMatrixSolver::ConstructMatrixColumn() {
     std::cout << "Construct matrix using Column integration method..." << std::endl;
-    double x = -data_.r();
+    Real x = -data_.r();
     for (size_t i = 0; i < (data_.grid_count() + 1) / 2; ++i) {
-        double y = -data_.r();
+        Real y = -data_.r();
         for (size_t j = 0; j < data_.grid_count(); ++j) {
             matrix_[i * data_.grid_count() + j] =
                 ((j == 0 || j == data_.grid_count() - 1) ? 0.5 : 1) * data_.step_size() *
@@ -55,7 +55,7 @@ void SimpleMatrixSolver::MultiplyMatrixByVector() {
         c_next_[data_.grid_count() - i - 1] = c_next_[i];
     }
 }
-std::vector<double> SimpleMatrixSolver::PerformCalculation() {
+std::vector<Real> SimpleMatrixSolver::PerformCalculation() {
     ProgressCounter calc_progress(calculation_name_);
     for (size_t i = 0; i < data_.grid_count(); ++i) {
         c_[i] = f_[i];
@@ -74,7 +74,7 @@ std::vector<double> SimpleMatrixSolver::PerformCalculation() {
 }
 void SimpleMatrixSolver::SaveResults() {
     std::ofstream file(data_.PathToResultFile(), std::ios::out);
-    double x = -data_.r();
+    Real x = -data_.r();
     for (size_t i = 0; i < data_.grid_count(); ++i) {
         file << std::fixed << std::setprecision(9) << x << " " << c_[i] << std::endl;
         x += data_.step_size();

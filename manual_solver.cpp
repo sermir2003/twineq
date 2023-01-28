@@ -22,7 +22,7 @@ ManualSolver::ManualSolver(const Task& task, const std::string& calculation_name
 }
 void ManualSolver::ConstructFunction() {
     std::cout << "Construct function..." << std::endl;
-    double x = -data_.r();
+    Real x = -data_.r();
     for (size_t i = 0; i < (data_.grid_count() + 1) / 2; ++i) {
         f_[i] = (data_.N() * data_.m(x) - data_.s() * data_.w(x)) /
                 (data_.b() + data_.s() * data_.w(x));
@@ -31,15 +31,15 @@ void ManualSolver::ConstructFunction() {
     }
     std::cout << "Construct function --- Done!" << std::endl;
 }
-std::vector<double> ManualSolver::PerformCalculation() {
+std::vector<Real> ManualSolver::PerformCalculation() {
     ProgressCounter calc_progress(calculation_name_);
     for (size_t i = 0; i < data_.grid_count(); ++i) {
         c_[i] = f_[i];
     }
     for (size_t iteration = 1; iteration < data_.iter_count(); ++iteration) {
-        double x = -data_.r();
+        Real x = -data_.r();
         for (size_t i = 0; i < (data_.grid_count() + 1) / 2; ++i) {
-            double integral = integrator_->Integrate(x);
+            Real integral = integrator_->Integrate(x);
             c_next_[i] = f_[i] + integral;
             c_next_[data_.grid_count() - i - 1] = c_next_[i];
             x += data_.step_size();
@@ -55,7 +55,7 @@ std::vector<double> ManualSolver::PerformCalculation() {
 }
 void ManualSolver::SaveResults() {
     std::ofstream file(data_.PathToResultFile(), std::ios::out);
-    double x = -data_.r();
+    Real x = -data_.r();
     for (size_t i = 0; i < data_.grid_count(); ++i) {
         file << std::fixed << std::setprecision(9) << x << " " << c_[i] << std::endl;
         x += data_.step_size();

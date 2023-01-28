@@ -1,6 +1,7 @@
 #pragma once
 #include <chrono>
 #include <string>
+#include "real_number.h"
 
 class ProgressCounter {
 private:
@@ -8,6 +9,6 @@ private:
     std::string action_name_;
 public:
     ProgressCounter(const std::string& action_name);
-    void UpdateProgress(double progress);
+    void UpdateProgress(Real progress);
     void FinishAction();
 };

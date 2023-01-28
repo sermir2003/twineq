@@ -7,9 +7,9 @@
 class ManualSolver {
 private:
     const Task& data_;
-    std::vector<double> f_;
-    std::vector<double> c_;
-    std::vector<double> c_next_;
+    std::vector<Real> f_;
+    std::vector<Real> c_;
+    std::vector<Real> c_next_;
     std::unique_ptr<Integrator> integrator_;
     std::string calculation_name_;
 
@@ -19,5 +19,5 @@ private:
 
 public:
     ManualSolver(const Task& task, const std::string& calculation_name);
-    std::vector<double> PerformCalculation();
+    std::vector<Real> PerformCalculation();
 };

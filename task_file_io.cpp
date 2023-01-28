@@ -3,6 +3,7 @@
 #include <memory>
 #include "task_file_io.h"
 #include "kernels.h"
+#include "real_number.h"
 
 using Json = nlohmann::json;
 
@@ -40,10 +41,10 @@ Task TaskFileIO::ParseTaskFile(const std::string& path_to_file) {
         } else if (type_of_problem_str == "Original equation") {
             task.problem_ = ProblemType::ORIGINAL_EQUATION;
         } else {
-            throw TaskFileParseException("Unknown integration method.");
+            throw TaskFileParseException("Unknown problem type.");
         }
         if (data_json["kernel"]["type"].get<std::string>() == "Exponential") {
-            double A, B;
+            Real A, B;
             try {
                 A = std::stod(data_json["kernel"]["A"].get<std::string>());
                 B = std::stod(data_json["kernel"]["A"].get<std::string>());
@@ -52,7 +53,7 @@ Task TaskFileIO::ParseTaskFile(const std::string& path_to_file) {
             }
             task.kernels_ = std::make_unique<DanchenkoExpKernels>(A, B);
         } else if (data_json["kernel"]["type"].get<std::string>() == "Rational") {
-            double A, p;
+            Real A, p;
             try {
                 A = std::stod(data_json["kernel"]["A"].get<std::string>());
                 p = std::stod(data_json["kernel"]["p"].get<std::string>());

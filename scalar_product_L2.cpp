@@ -3,11 +3,11 @@
 #include <iostream>
 #include <iomanip>
 
-ScalarProductL2::ScalarProductL2(const Task& task, const std::vector<double>& c) : data_(task), c_(c) {
+ScalarProductL2::ScalarProductL2(const Task& task, const std::vector<Real>& c) : data_(task), c_(c) {
 }
-double ScalarProductL2::Calculate() const {
-    double integral = 0;
-    double x = -data_.r();
+Real ScalarProductL2::Calculate() const {
+    Real integral = 0;
+    Real x = -data_.r();
     for (size_t i = 0; i < data_.grid_count(); ++i) {
         integral += ((i == 0 || i == data_.grid_count() - 1) ? 0.5 : 1) * data_.w(x) * (c_[i] + 1);
         x += data_.step_size();

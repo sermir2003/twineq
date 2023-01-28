@@ -7,10 +7,10 @@
 class SimpleMatrixSolver {
 private:
     const Task& data_;
-    std::vector<double> f_;
-    std::vector<double> c_;
-    std::vector<double> c_next_;
-    std::vector<double> matrix_;
+    std::vector<Real> f_;
+    std::vector<Real> c_;
+    std::vector<Real> c_next_;
+    std::vector<Real> matrix_;
     std::string calculation_name_;
 
 private:
@@ -21,5 +21,5 @@ private:
 
 public:
     SimpleMatrixSolver(const Task& task, const std::string& calculation_name);
-    std::vector<double> PerformCalculation();
+    std::vector<Real> PerformCalculation();
 };

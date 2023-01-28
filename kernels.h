@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include "real_number.h"
 
 enum class KernelsType {
     DANCHENKO_RATIONAL,
@@ -11,9 +12,9 @@ enum class KernelsType {
  */
 class Kernels {
 public:
-    virtual double m(double x) const = 0;
-    virtual double w(double x) const = 0;
-    virtual double getN() const = 0;
+    virtual Real m(Real x) const = 0;
+    virtual Real w(Real x) const = 0;
+    virtual Real getN() const = 0;
     virtual ~Kernels();
     virtual std::unique_ptr<Kernels> Clone() const = 0;
 };
@@ -23,14 +24,14 @@ public:
  */
 class DanchenkoRationalKernels : public Kernels {
 private:
-    double A;
-    double p;
+    Real A;
+    Real p;
 
 public:
-    DanchenkoRationalKernels(double A, double p);
-    double m(double x) const override;
-    double w(double x) const override;
-    double getN() const override;
+    DanchenkoRationalKernels(Real A, Real p);
+    Real m(Real x) const override;
+    Real w(Real x) const override;
+    Real getN() const override;
     std::unique_ptr<Kernels> Clone() const override;
 };
 
@@ -39,13 +40,13 @@ public:
  */
 class DanchenkoExpKernels : public Kernels {
 private:
-    double A;
-    double B;
+    Real A;
+    Real B;
 
 public:
-    DanchenkoExpKernels(double A, double B);
-    double m(double x) const override;
-    double w(double x) const override;
-    double getN() const override;
+    DanchenkoExpKernels(Real A, Real B);
+    Real m(Real x) const override;
+    Real w(Real x) const override;
+    Real getN() const override;
     std::unique_ptr<Kernels> Clone() const override;
 };

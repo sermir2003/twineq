@@ -1,6 +1,7 @@
 #include "progress_counter.h"
 #include <iostream>
 #include <iomanip>
+#include "real_number.h"
 
 typedef std::chrono::time_point<std::chrono::high_resolution_clock> Time;
 
@@ -11,7 +12,7 @@ ProgressCounter::ProgressCounter(const std::string& action_name) : action_name_(
     std::cout << "Progress: 0%" << std::flush;
     start_time_ = std::chrono::high_resolution_clock::now();
 }
-void ProgressCounter::UpdateProgress(double progress) {
+void ProgressCounter::UpdateProgress(Real progress) {
     std::cout << kBleachingLine;
     Time cur_time = std::chrono::high_resolution_clock::now();
     auto delta =

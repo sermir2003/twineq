@@ -2,34 +2,35 @@
 #include "integrator_types.h"
 #include "task.h"
 #include <vector>
+#include "real_number.h"
 
 class Integrator {
 protected:
     const Task& data_;
-    const std::vector<double>& c_;
+    const std::vector<Real>& c_;
 
 public:
-    Integrator(const Task& data, const std::vector<double>& c) : data_(data), c_(c) {
+    Integrator(const Task& data, const std::vector<Real>& c) : data_(data), c_(c) {
     }
-    virtual double Integrate(double x) = 0;
+    virtual Real Integrate(Real x) = 0;
     virtual ~Integrator() {
     }
 };
 
 class ColumnMethod : public Integrator {
 public:
-    ColumnMethod(const Task& data, const std::vector<double>& c);
-    double Integrate(double x) override;
+    ColumnMethod(const Task& data, const std::vector<Real>& c);
+    Real Integrate(Real x) override;
 };
 
 class TrapezoidMethod : public Integrator {
 public:
-    TrapezoidMethod(const Task& data, const std::vector<double>& c);
-    double Integrate(double x) override;
+    TrapezoidMethod(const Task& data, const std::vector<Real>& c);
+    Real Integrate(Real x) override;
 };
 
 class SimpsonsMethod : public Integrator {
 public:
-    SimpsonsMethod(const Task& data, const std::vector<double>& c);
-    double Integrate(double x) override;
+    SimpsonsMethod(const Task& data, const std::vector<Real>& c);
+    Real Integrate(Real x) override;
 };

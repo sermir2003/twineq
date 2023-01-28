@@ -1,30 +1,30 @@
 #include "task.h"
 
-double Task::m(double x) const {
+Real Task::m(Real x) const {
     return kernels_->m(x);
 }
-double Task::w(double x) const {
+Real Task::w(Real x) const {
     return kernels_->w(x);
 }
-double Task::b() const {
+Real Task::b() const {
     return b_;
 }
-double Task::s() const {
+Real Task::s() const {
     return s_;
 }
-double Task::r() const {
+Real Task::r() const {
     return r_;
 }
 size_t Task::grid_count() const {
     return grid_count_;
 }
-double Task::step_size() const {
+Real Task::step_size() const {
     return step_size_;
 }
 size_t Task::iter_count() const {
     return iter_count_;
 }
-double Task::N() const {
+Real Task::N() const {
     return N_;
 }
 IntegratorType Task::GetIntegrationMethod() const {

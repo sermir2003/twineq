@@ -4,9 +4,9 @@
 class ScalarProductL2 {
 private:
     const Task& data_;
-    const std::vector<double>& c_;
+    const std::vector<Real>& c_;
 
 public:
-    ScalarProductL2(const Task& task, const std::vector<double>& c);
-    double Calculate() const;
+    ScalarProductL2(const Task& task, const std::vector<Real>& c);
+    Real Calculate() const;
 };
