@@ -6,15 +6,22 @@
 
 using Json = nlohmann::json;
 
-Json file_content = {{"Problem", "Twin equation"},
-                     {"kernel", {{"type", "Exponential"}, {"A", "1"}, {"B", "1"}}},
-                     {"b", "1"},
-                     {"d'", "1"},
-                     {"r", "20"},
-                     {"grid count", "5001"},
-                     {"iteration count", "1000"},
-                     {"path to result file", "plot.txt"},
-                     {"Integration method", "Column"}};
+Json file_content = {
+    {"Problem", "Twin equation"},
+    {"kernel", {
+        {"type", "Exponential"},
+        {"A", "1"},
+        {"B", "1"}}
+    },
+    {"b", "1"},
+    {"d'", "1"},
+    {"r", "20"},
+    {"grid count", "5001"},
+    {"iteration count", "1000"},
+    {"path to result file", "plot.txt"},
+    {"Integration method", "Column"},
+    {"Iteration method", "Manual"},
+};
 
 void TaskFileIO::CreateFile(const std::string& path_to_file) {
     std::ofstream file(path_to_file, std::ios::out);
@@ -26,16 +33,15 @@ Task TaskFileIO::ParseTaskFile(const std::string& path_to_file) {
     Json data_json;
     file >> data_json;
     try {
+        Task task;
         std::string type_of_problem_str = data_json["Problem"].get<std::string>();
-        ProblemType type_of_problem;
         if (type_of_problem_str == "Twin equation") {
-            type_of_problem = ProblemType::TWIN_EQUATION;
+            task.problem_ = ProblemType::TWIN_EQUATION;
         } else if (type_of_problem_str == "Original equation") {
-            type_of_problem = ProblemType::ORIGINAL_EQUATION;
+            task.problem_ = ProblemType::ORIGINAL_EQUATION;
         } else {
             throw TaskFileParseException("Unknown integration method.");
         }
-        std::unique_ptr<Kernels> kernels = nullptr;
         if (data_json["kernel"]["type"].get<std::string>() == "Exponential") {
             double A, B;
             try {
@@ -44,7 +50,7 @@ Task TaskFileIO::ParseTaskFile(const std::string& path_to_file) {
             } catch (...) {
                 throw TaskFileParseException("Incorrect Exponential Kernel parameters.");
             }
-            kernels = std::make_unique<DanchenkoExpKernels>(A, B);
+            task.kernels_ = std::make_unique<DanchenkoExpKernels>(A, B);
         } else if (data_json["kernel"]["type"].get<std::string>() == "Rational") {
             double A, p;
             try {
@@ -53,30 +59,36 @@ Task TaskFileIO::ParseTaskFile(const std::string& path_to_file) {
             } catch (...) {
                 throw TaskFileParseException("Incorrect Exponential Kernel parameters.");
             }
-            kernels = std::make_unique<DanchenkoRationalKernels>(A, p);
+            task.kernels_ = std::make_unique<DanchenkoRationalKernels>(A, p);
         } else {
             throw TaskFileParseException("Unknown kernel type.");
         }
-        double b = std::stod(data_json["b"].get<std::string>());
-        double s = std::stod(data_json["d'"].get<std::string>());
-        double r = std::stod(data_json["r"].get<std::string>());
-        double grid_count = std::stod(data_json["grid count"].get<std::string>());
-        double iteration_count = std::stod(data_json["iteration count"].get<std::string>());
-        std::string path_to_result_file = data_json["path to result file"].get<std::string>();
+        task.b_ = std::stod(data_json["b"].get<std::string>());
+        task.s_ = std::stod(data_json["d'"].get<std::string>());
+        task.r_ = std::stod(data_json["r"].get<std::string>());
+        task.grid_count_ = std::stoi(data_json["grid count"].get<std::string>());
+        task.iter_count_ = std::stoi(data_json["iteration count"].get<std::string>());
+        task.path_to_result_file_ = data_json["path to result file"].get<std::string>();
         std::string int_method = data_json["Integration method"].get<std::string>();
-        IntegratorType type_of_integrator;
         if (int_method == "Column") {
-            type_of_integrator = IntegratorType::COLUMN;
+            task.integration_method_ = IntegratorType::COLUMN;
         } else if (int_method == "Trapezoid") {
-            type_of_integrator = IntegratorType::TRAPEZOID;
+            task.integration_method_ = IntegratorType::TRAPEZOID;
         } else if (int_method == "Simpsons") {
-            type_of_integrator = IntegratorType::SIMPSONS;
+            task.integration_method_ = IntegratorType::SIMPSONS;
         } else {
             throw TaskFileParseException("Unknown integration method.");
         }
-        double N = kernels->getN();
-        return Task(b, s, r, N, grid_count, iteration_count, std::move(kernels),
-                    true, path_to_result_file, type_of_integrator, type_of_problem);
+        std::string iter_method = data_json["Iteration method"].get<std::string>();
+        if (iter_method == "Manual") {
+            task.iteration_method_ = IterationType::MANUAL;
+        } else if (iter_method == "Matrix") {
+            task.iteration_method_ = IterationType::MATRIX;
+        } else {
+            throw TaskFileParseException("Unknown iteration method.");
+        }
+        task.N_ = task.kernels_->getN();
+        return task;
     } catch (const nlohmann::json_abi_v3_11_2::detail::type_error& exception) {
         if (std::string(exception.what()) ==
             "[json.exception.type_error.302] type must be string, but is null") {

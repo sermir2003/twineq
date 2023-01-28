@@ -4,20 +4,22 @@
 #include "integrators.h"
 #include "progress_counter.h"
 
-class ManualSolver {
+class SimpleMatrixSolver {
 private:
     const Task& data_;
     std::vector<double> f_;
     std::vector<double> c_;
     std::vector<double> c_next_;
-    std::unique_ptr<Integrator> integrator_;
+    std::vector<double> matrix_;
     std::string calculation_name_;
 
 private:
     void ConstructFunction();
+    void ConstructMatrixColumn();
+    void MultiplyMatrixByVector();
     void SaveResults();
 
 public:
-    ManualSolver(const Task& task, const std::string& calculation_name);
-    std::vector<double> PerformCalculation();
+    SimpleMatrixSolver(const Task& task, const std::string& calculation_name);
+    void PerformCalculation();
 };

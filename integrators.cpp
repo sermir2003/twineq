@@ -7,7 +7,7 @@ double ColumnMethod::Integrate(double x) {
     double depends_only_on_x = data_.b() / (data_.b() + data_.s() * data_.w(x));
     double y = -data_.r();
     for (size_t j = 0; j < data_.grid_count(); ++j) {
-        integral += ((j == 0 || j == data_.iter_count() - 1) ? 0.5 : 1) * data_.m(x - y) * c_[j];
+        integral += ((j == 0 || j == data_.grid_count() - 1) ? 0.5 : 1) * data_.m(x - y) * c_[j];
         y += data_.step_size();
     }
     integral *= data_.step_size();
@@ -22,7 +22,7 @@ double TrapezoidMethod::Integrate(double x) {
     double integral = 0;
     double y = -data_.r();
     for (size_t j = 0; j < data_.grid_count(); ++j) {
-        integral += ((j == 0 || j == data_.iter_count() - 1) ? 0.5 : 1) * data_.m(x - y) * c_[j];
+        integral += ((j == 0 || j == data_.grid_count() - 1) ? 0.5 : 1) * data_.m(x - y) * c_[j];
         y += data_.step_size();
     }
     integral *= data_.step_size();
