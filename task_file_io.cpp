@@ -88,6 +88,7 @@ Task TaskFileIO::ParseTaskFile(const std::string& path_to_file) {
             throw TaskFileParseException("Unknown iteration method.");
         }
         task.N_ = task.kernels_->getN();
+        task.step_size_ = 2 * task.r_ / (task.grid_count_ - 1);
         return task;
     } catch (const nlohmann::json_abi_v3_11_2::detail::type_error& exception) {
         if (std::string(exception.what()) ==
