@@ -32,9 +32,10 @@ void SimpleMatrixSolver::ConstructFunction() {
     std::cout << "Construct function --- Done!" << std::endl;
 }
 void SimpleMatrixSolver::ConstructMatrixColumn() {
-    std::cout << "Construct matrix using Column integration method..." << std::endl;
+    ProgressCounter calc_progress("Matrix construction using the column integration method");
     Real x = -data_.r();
     for (size_t i = 0; i < (data_.grid_count() + 1) / 2; ++i) {
+        calc_progress.UpdateProgress(1.0 * i / ((data_.grid_count() + 1) / 2));
         Real y = -data_.r();
         for (size_t j = 0; j < data_.grid_count(); ++j) {
             matrix_[i * data_.grid_count() + j] =
@@ -44,7 +45,6 @@ void SimpleMatrixSolver::ConstructMatrixColumn() {
         }
         x += data_.step_size();
     }
-    std::cout << "Construct matrix --- Done!" << std::endl;
 }
 void SimpleMatrixSolver::MultiplyMatrixByVector() {
     for (size_t i = 0; i < (data_.grid_count() + 1) / 2; ++i) {
