@@ -12,8 +12,6 @@ Real ScalarProductL2::Calculate() const {
         integral += ((i == 0 || i == data_.grid_count() - 1) ? 0.5 : 1) * data_.w(x) * (c_[i] + 1);
         x += data_.step_size();
     }
-    std::cout << "debug: " << std::fixed << std::setprecision(9) << data_.step_size() << std::endl;
     integral *= data_.step_size();
-    integral *= data_.s();
     return integral;
 }

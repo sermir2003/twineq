@@ -21,7 +21,6 @@ SimpleMatrixSolver::SimpleMatrixSolver(const Task& task, const std::string& calc
     }
 }
 void SimpleMatrixSolver::ConstructFunction() {
-    std::cout << "Construct function..." << std::endl;
     Real x = -data_.r();
     for (size_t i = 0; i < (data_.grid_count() + 1) / 2; ++i) {
         f_[i] = (data_.N() * data_.m(x) - data_.s() * data_.w(x)) /
@@ -29,7 +28,6 @@ void SimpleMatrixSolver::ConstructFunction() {
         f_[data_.grid_count() - i - 1] = f_[i];
         x += data_.step_size();
     }
-    std::cout << "Construct function --- Done!" << std::endl;
 }
 void SimpleMatrixSolver::ConstructMatrixColumn() {
     ProgressCounter calc_progress("Matrix construction using the column integration method");
