@@ -21,7 +21,7 @@ Json file_content = {
     {"iteration count", "1000"},
     {"path to result file", "plot.txt"},
     {"Integration method", "Column"},
-    {"Iteration method", "Manual"},
+    {"Iteration method", "Matrix"},
 };
 
 void TaskFileIO::CreateFile(const std::string& path_to_file) {
