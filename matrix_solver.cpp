@@ -57,7 +57,7 @@ std::vector<Real> SimpleMatrixSolver::PerformCalculation() {
     ProgressCounter calc_progress(calculation_name_);
     Real x = -data_.r();
     for (size_t i = 0; i < data_.grid_count(); ++i) {
-        c_[i] = f_[i] + data_.w(x);
+        c_[i] = f_[i] + data_.m(x);
         x += data_.step_size();
     }
     for (size_t iteration = 1; iteration < data_.iter_count(); ++iteration) {
