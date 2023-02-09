@@ -44,9 +44,9 @@ void SimpleMatrixSolver::ConstructMatrixColumn() {
         x += data_.step_size();
     }
 }
-void SimpleMatrixSolver::MultiplyMatrixByVector() {
+void SimpleMatrixSolver::PerformIteration() {
     for (size_t i = 0; i < (data_.grid_count() + 1) / 2; ++i) {
-        c_next_[i] = 0;
+        c_next_[i] = f_[i];
         for (size_t j = 0; j < data_.grid_count(); ++j) {
             c_next_[i] += matrix_[i * data_.grid_count() + j] * c_[j];
         }
@@ -57,14 +57,11 @@ std::vector<Real> SimpleMatrixSolver::PerformCalculation() {
     ProgressCounter calc_progress(calculation_name_);
     Real x = -data_.r();
     for (size_t i = 0; i < data_.grid_count(); ++i) {
-        c_[i] = f_[i] + data_.m(x);
+        c_[i] = f_[i];
         x += data_.step_size();
     }
-    for (size_t iteration = 1; iteration < data_.iter_count(); ++iteration) {
-        MultiplyMatrixByVector();
-        for (size_t i = 0; i < data_.grid_count(); ++i) {
-            c_next_[i] += f_[i];
-        }
+    for (size_t iteration = 0; iteration < data_.iter_count(); ++iteration) {
+        PerformIteration();
         std::swap(c_, c_next_);
         calc_progress.UpdateProgress(1.0 * iteration / data_.iter_count());
     }

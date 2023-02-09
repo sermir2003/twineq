@@ -4,6 +4,7 @@
 #include "task_file_io.h"
 #include "kernels.h"
 #include "real_number.h"
+#include <iostream>
 
 using Json = nlohmann::json;
 
@@ -47,7 +48,7 @@ Task TaskFileIO::ParseTaskFile(const std::string& path_to_file) {
             Real A, B;
             try {
                 A = std::stod(data_json["kernel"]["A"].get<std::string>());
-                B = std::stod(data_json["kernel"]["A"].get<std::string>());
+                B = std::stod(data_json["kernel"]["B"].get<std::string>());
             } catch (...) {
                 throw TaskFileParseException("Incorrect Exponential Kernel parameters.");
             }

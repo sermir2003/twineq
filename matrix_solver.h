@@ -16,7 +16,7 @@ private:
 private:
     void ConstructFunction();
     void ConstructMatrixColumn();
-    void MultiplyMatrixByVector();
+    void PerformIteration();
     void SaveResults();
 
 public:

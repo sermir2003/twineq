@@ -30,7 +30,6 @@ void ProgressCounter::FinishAction() {
     std::cout << kBleachingLine << "Progress: 100%"
               << "; time used: " << MillisecondsToFormat(delta)
               << std::endl;
-    std::cout << action_name_ << " is completed" << std::endl;
 }
 std::string ProgressCounter::MillisecondsToFormat(uint64_t time) {
     time /= 1000;
