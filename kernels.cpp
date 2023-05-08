@@ -1,6 +1,5 @@
 #include "kernels.h"
 #include <cmath>
-#include "real_number.h"
 
 Kernels::~Kernels() {
 }
@@ -37,4 +36,18 @@ Real DanchenkoExpKernels::getN() const {
 }
 std::unique_ptr<Kernels> DanchenkoExpKernels::Clone() const {
     return std::make_unique<DanchenkoExpKernels>(A, B);
+}
+
+std::unique_ptr<Kernels> MakeKernels(const Json& kernels_info) {
+    std::string type = kernels_info["type"].get<std::string>();
+    if (type == "Exponential") {
+        double A = kernels_info["A"].get<double>();
+        double B = kernels_info["B"].get<double>();
+        return std::make_unique<DanchenkoExpKernels>(A, B);
+    } else if (type == "Rational") {
+        double A = kernels_info["A"].get<double>();
+        double p = kernels_info["p"].get<double>();
+        return std::make_unique<DanchenkoRationalKernels>(A, p);
+    }
+    throw TaskFileParseException("Unknown kernels type\n");
 }

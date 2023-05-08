@@ -1,11 +1,10 @@
 #pragma once
+#include <nlohmann/json.hpp>
 #include <memory>
 #include "real_number.h"
+#include "task_file_parse_exception.h"
 
-enum class KernelsType {
-    DANCHENKO_RATIONAL,
-    DANCHENKO_EXP_KERNEL,
-};
+using Json = nlohmann::json;
 
 /**
  * Abstract class for birth and death kernels
@@ -50,3 +49,5 @@ public:
     Real getN() const override;
     std::unique_ptr<Kernels> Clone() const override;
 };
+
+std::unique_ptr<Kernels> MakeKernels(const Json& kernels_info);

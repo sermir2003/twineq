@@ -1,14 +1,14 @@
 #include <iostream>
 #include <string>
 #include <memory>
-#include "input_subsystem.h"
-#include "task_file_io.h"
+#include "cmd_args_parser.h"
+#include "task.h"
 #include "solution_launcher.h"
 
 int main(int argc, char* argv[]) {
     std::unique_ptr<InputRequest> request;
     try {
-        request = InputSubsystem::Parse(argc, argv);
+        request = CMDArgsParser::Parse(argc, argv);
     } catch (const ParseException& exception) {
         std::cout << "ERROR: incorrect parameters\n"
                   << exception.what()
@@ -17,15 +17,16 @@ int main(int argc, char* argv[]) {
         return 0;
     }
     if (request->GetType() == InputRequestType::CREATE_TASK_FILE) {
-        TaskFileIO::CreateFile(
-            static_cast<RequestCreateTaskFile*>(request.get())->path_to_task_file);
-    }
-    else if (request->GetType() == InputRequestType::SOLVE) {
-        SolutionLauncher(std::move(static_cast<RequestSolve*>(request.get())->task));
-    }
-    else if (request->GetType() == InputRequestType::HELP) {
-        std::cout << "The developer of this program needs help himself.\n"
-                     "(function --help not implemented yet)" << std::endl;
+        std::string file_path = static_cast<RequestCreateTaskFile*>(request.get())->file_path;
+        Task::CreateTaskFile(file_path);
+    } else if (request->GetType() == InputRequestType::SOLVE) {
+        std::string file_path = static_cast<RequestCreateTaskFile*>(request.get())->file_path;
+        Task task(file_path);
+        SolutionLauncher(std::move(task));
+    } else if (request->GetType() == InputRequestType::HELP) {
+        std::cout << "Instructions for compiling and running are in README.md on the website\n"
+                     "https://github.com/sermir2003/twineq\n"
+                  << std::endl;
     }
     return 0;
 }

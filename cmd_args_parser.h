@@ -5,7 +5,7 @@
 #include "input_request.h"
 #include <stdexcept>
 
-class InputSubsystem {
+class CMDArgsParser {
 public:
     static std::unique_ptr<InputRequest> Parse(size_t argc, char *argv[]);
 

@@ -1,9 +1,8 @@
-#include "input_subsystem.h"
-#include "input_request.h"
-#include "task_file_io.h"
+#include "cmd_args_parser.h"
 #include <iostream>
+#include "task_file_parse_exception.h"
 
-std::vector<std::string> InputSubsystem::Tokenize(size_t argc, char* argv[]) {
+std::vector<std::string> CMDArgsParser::Tokenize(size_t argc, char* argv[]) {
     std::vector<std::string> strings(argc);
     for (size_t i = 0; i < argc; ++i) {
         strings[i] = std::string(argv[i]);
@@ -11,11 +10,11 @@ std::vector<std::string> InputSubsystem::Tokenize(size_t argc, char* argv[]) {
     return strings;
 }
 
-std::unique_ptr<InputRequest> InputSubsystem::Parse(size_t argc, char* argv[]) {
+std::unique_ptr<InputRequest> CMDArgsParser::Parse(size_t argc, char* argv[]) {
     std::string program_name = std::string(argv[0]);
     --argc;
     argv = &argv[1];
-    std::vector<std::string> tokens = InputSubsystem::Tokenize(argc, argv);
+    std::vector<std::string> tokens = CMDArgsParser::Tokenize(argc, argv);
     if (tokens.empty()) {
         throw ParseException("There are no parameters, launch is impossible.");
     } else {
@@ -28,7 +27,7 @@ std::unique_ptr<InputRequest> InputSubsystem::Parse(size_t argc, char* argv[]) {
             } else if (tokens.size() == 2) {
                 return std::make_unique<RequestCreateTaskFile>(tokens[1]);
             } else if (tokens.size() == 1) {
-                return std::make_unique<RequestCreateTaskFile>(kTaskFileDefaultName);
+                return std::make_unique<RequestCreateTaskFile>("");
             }
         } else if (tokens[0] == "solve") {
             if (tokens.size() > 2) {
@@ -38,15 +37,14 @@ std::unique_ptr<InputRequest> InputSubsystem::Parse(size_t argc, char* argv[]) {
                     "conducive to this.");
             } else if (tokens.size() == 2) {
                 try {
-                    return std::make_unique<RequestSolve>(TaskFileIO::ParseTaskFile(tokens[1]));
+                    return std::make_unique<RequestSolve>(tokens[1]);
                 } catch (const TaskFileParseException& exception) {
                     std::cout << "ERROR: incorrect task file\n" << exception.what() << std::endl;
                     exit(0);
                 }
             } else if (tokens.size() == 1) {
                 try {
-                    return std::make_unique<RequestSolve>(
-                        TaskFileIO::ParseTaskFile(kTaskFileDefaultName));
+                    return std::make_unique<RequestSolve>("");
                 } catch (const TaskFileParseException& exception) {
                     std::cout << "ERROR: incorrect task file\n" << exception.what() << std::endl;
                     exit(0);

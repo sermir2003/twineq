@@ -57,7 +57,7 @@ std::vector<Real> SimpleMatrixSolver::PerformCalculation() {
     ProgressCounter calc_progress(calculation_name_);
     Real x = -data_.r();
     for (size_t i = 0; i < data_.grid_count(); ++i) {
-        c_[i] = f_[i];
+        c_[i] = f_[i] + data_.w(x);
         x += data_.step_size();
     }
     for (size_t iteration = 0; iteration < data_.iter_count(); ++iteration) {
@@ -73,7 +73,7 @@ void SimpleMatrixSolver::SaveResults() {
     std::ofstream file(data_.PathToResultFile(), std::ios::out);
     Real x = -data_.r();
     for (size_t i = 0; i < data_.grid_count(); ++i) {
-        file << std::fixed << std::setprecision(9) << x << " " << c_[i] << std::endl;
+        file << std::fixed << std::setprecision(18) << x << " " << c_[i] << std::endl;
         x += data_.step_size();
     }
 }

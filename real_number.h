@@ -1,3 +1,3 @@
 #pragma once
 
-typedef double Real;
+typedef long double Real;

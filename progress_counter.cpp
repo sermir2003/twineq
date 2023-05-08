@@ -1,13 +1,13 @@
 #include "progress_counter.h"
 #include <iostream>
 #include <iomanip>
-#include "real_number.h"
 
 typedef std::chrono::time_point<std::chrono::high_resolution_clock> Time;
 
 static const std::string kBleachingLine = "\r" + std::string(100, ' ') + '\r';
 
-ProgressCounter::ProgressCounter(const std::string& action_name) : action_name_(action_name), enabled_(true) {
+ProgressCounter::ProgressCounter(const std::string& action_name)
+    : action_name_(action_name), enabled_(true) {
     std::cout << action_name_ << " has begun" << std::endl;
     std::cout << "Progress: 0%" << std::flush;
     start_time_ = std::chrono::high_resolution_clock::now();
@@ -28,8 +28,7 @@ void ProgressCounter::FinishAction() {
     auto delta =
         std::chrono::duration_cast<std::chrono::milliseconds>(cur_time - start_time_).count();
     std::cout << kBleachingLine << "Progress: 100%"
-              << "; time used: " << MillisecondsToFormat(delta)
-              << std::endl;
+              << "; time used: " << MillisecondsToFormat(delta) << std::endl;
 }
 std::string ProgressCounter::MillisecondsToFormat(uint64_t time) {
     time /= 1000;

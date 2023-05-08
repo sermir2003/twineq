@@ -2,6 +2,7 @@
 #include "manual_solver.h"
 #include "matrix_solver.h"
 #include "scalar_product_L2.h"
+
 #include <cmath>
 
 #include <iostream>
